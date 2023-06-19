@@ -8,21 +8,22 @@
 import UIKit
 
 final class CreateTrackerViewController: UIViewController {
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
         label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.tintColor = .ypBlack
+        label.textColor = .ypBlackDay
         return label
     }()
     
     private let habitButton: UIButton = {
         let button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(method), for: .touchUpInside)
+        button.addTarget(self, action: #selector(newHabit), for: .touchUpInside)
         button.setTitle("Привычка", for:.normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .ypBlack
-        button.tintColor = .ypWhite
+        button.backgroundColor = .ypBlackDay
+        button.tintColor = .ypWhiteDay
         button.layer.cornerRadius = 16
         return button
     }()
@@ -31,8 +32,8 @@ final class CreateTrackerViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Нерегулярное событие", for:.normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.backgroundColor = .ypBlack
-        button.tintColor = .ypWhite
+        button.backgroundColor = .ypBlackDay
+        button.tintColor = .ypWhiteDay
         button.layer.cornerRadius = 16
         return button
     }()
@@ -43,6 +44,7 @@ final class CreateTrackerViewController: UIViewController {
            setupSubviews(habitButton, irregularEvent, titleLabel)
            setupConstraints()
     }
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
@@ -59,10 +61,16 @@ final class CreateTrackerViewController: UIViewController {
             irregularEvent.topAnchor.constraint(equalTo: habitButton.bottomAnchor, constant: 16)
         ])
     }
+    
     private func setupSubviews(_ subviews: UIView...) {
         subviews.forEach { subview in
             view.addSubview(subview)
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
+    }
+    
+    @objc private func newHabit() {
+        let vc = NewHabitViewController()
+        present(vc, animated: true)
     }
  }

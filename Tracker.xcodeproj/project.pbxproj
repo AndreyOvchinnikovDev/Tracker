@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		1D78026B2A2D63A900D5C91B /* UIColor + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D78026A2A2D63A900D5C91B /* UIColor + Extensions.swift */; };
+		1D78026D2A2D775400D5C91B /* NewHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D78026C2A2D775400D5C91B /* NewHabitViewController.swift */; };
+		1D78026F2A2E160C00D5C91B /* NewHabitViewControllerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D78026E2A2E160C00D5C91B /* NewHabitViewControllerCell.swift */; };
+		1D7802712A2EC9C600D5C91B /* ColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7802702A2EC9C600D5C91B /* ColorCollectionViewCell.swift */; };
+		1D7802732A312FE100D5C91B /* NewHabitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7802722A312FE100D5C91B /* NewHabitTableViewCell.swift */; };
 		1D9ACEE02A2570F6006DD51F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9ACEDF2A2570F6006DD51F /* AppDelegate.swift */; };
 		1D9ACEE42A2570F6006DD51F /* TrackListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9ACEE32A2570F6006DD51F /* TrackListViewController.swift */; };
 		1D9ACEE92A2570F7006DD51F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D9ACEE82A2570F7006DD51F /* Assets.xcassets */; };
@@ -15,10 +19,15 @@
 		1D9ACEF42A257AFD006DD51F /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9ACEF32A257AFD006DD51F /* StatisticViewController.swift */; };
 		1D9ACEF62A25882B006DD51F /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9ACEF52A25882B006DD51F /* TabBarController.swift */; };
 		1D9ACEF82A2A919F006DD51F /* CreateTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9ACEF72A2A919E006DD51F /* CreateTrackerViewController.swift */; };
+		1DCDC44C2A3A7C560003B039 /* SupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCDC44B2A3A7C560003B039 /* SupplementaryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1D78026A2A2D63A900D5C91B /* UIColor + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extensions.swift"; sourceTree = "<group>"; };
+		1D78026C2A2D775400D5C91B /* NewHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitViewController.swift; sourceTree = "<group>"; };
+		1D78026E2A2E160C00D5C91B /* NewHabitViewControllerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitViewControllerCell.swift; sourceTree = "<group>"; };
+		1D7802702A2EC9C600D5C91B /* ColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollectionViewCell.swift; sourceTree = "<group>"; };
+		1D7802722A312FE100D5C91B /* NewHabitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitTableViewCell.swift; sourceTree = "<group>"; };
 		1D9ACEDC2A2570F6006DD51F /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D9ACEDF2A2570F6006DD51F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1D9ACEE32A2570F6006DD51F /* TrackListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewController.swift; sourceTree = "<group>"; };
@@ -28,6 +37,7 @@
 		1D9ACEF32A257AFD006DD51F /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		1D9ACEF52A25882B006DD51F /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		1D9ACEF72A2A919E006DD51F /* CreateTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerViewController.swift; sourceTree = "<group>"; };
+		1DCDC44B2A3A7C560003B039 /* SupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +82,11 @@
 				1D9ACEDF2A2570F6006DD51F /* AppDelegate.swift */,
 				1D9ACEE32A2570F6006DD51F /* TrackListViewController.swift */,
 				1D9ACEF72A2A919E006DD51F /* CreateTrackerViewController.swift */,
+				1D78026C2A2D775400D5C91B /* NewHabitViewController.swift */,
+				1D7802722A312FE100D5C91B /* NewHabitTableViewCell.swift */,
+				1D78026E2A2E160C00D5C91B /* NewHabitViewControllerCell.swift */,
+				1DCDC44B2A3A7C560003B039 /* SupplementaryView.swift */,
+				1D7802702A2EC9C600D5C91B /* ColorCollectionViewCell.swift */,
 				1D9ACEE82A2570F7006DD51F /* Assets.xcassets */,
 				1D9ACEEA2A2570F7006DD51F /* LaunchScreen.storyboard */,
 				1D9ACEED2A2570F7006DD51F /* Info.plist */,
@@ -151,10 +166,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D78026F2A2E160C00D5C91B /* NewHabitViewControllerCell.swift in Sources */,
 				1D9ACEF42A257AFD006DD51F /* StatisticViewController.swift in Sources */,
+				1D78026D2A2D775400D5C91B /* NewHabitViewController.swift in Sources */,
+				1D7802732A312FE100D5C91B /* NewHabitTableViewCell.swift in Sources */,
 				1D9ACEF62A25882B006DD51F /* TabBarController.swift in Sources */,
+				1DCDC44C2A3A7C560003B039 /* SupplementaryView.swift in Sources */,
 				1D9ACEE42A2570F6006DD51F /* TrackListViewController.swift in Sources */,
 				1D78026B2A2D63A900D5C91B /* UIColor + Extensions.swift in Sources */,
+				1D7802712A2EC9C600D5C91B /* ColorCollectionViewCell.swift in Sources */,
 				1D9ACEF82A2A919F006DD51F /* CreateTrackerViewController.swift in Sources */,
 				1D9ACEE02A2570F6006DD51F /* AppDelegate.swift in Sources */,
 			);

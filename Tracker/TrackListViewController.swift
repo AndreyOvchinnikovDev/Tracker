@@ -15,6 +15,7 @@ class TrackListViewController: UIViewController {
         title = "Трекеры"
         configureNavigationBar()
     }
+    
     private func configureNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(pushVC))
         let datePicker = UIDatePicker()
@@ -23,13 +24,16 @@ class TrackListViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
         setSearchController()
     }
+    
     private func setSearchController() {
         let searchController = UISearchController()
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.placeholder = "Поиск"
         searchController.searchBar.setValue("Отмена", forKey: "cancelButtonText")
+        searchController.searchBar.searchTextField.clearButtonMode = .never
         navigationItem.searchController = searchController
         }
+    
     @objc func pushVC() {
         let createTrackerVC = CreateTrackerViewController()
         present(createTrackerVC, animated: true)
