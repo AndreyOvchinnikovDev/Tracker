@@ -21,7 +21,10 @@ final class TabBarController: UITabBarController {
         ]
     }
     
-    private func setViewControllers(viewController: UIViewController, title: String, image: UIImage?) -> UIViewController {
+    private func setViewControllers(viewController: UIViewController,
+                                    title: String,
+                                    image: UIImage?) -> UIViewController {
+        
         let vc = UINavigationController(rootViewController: viewController)
         vc.navigationBar.prefersLargeTitles = true
         UINavigationBar.appearance().tintColor = .black

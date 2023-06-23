@@ -7,8 +7,14 @@
 
 import UIKit
 
+protocol ScheduleViewControllerDelegate: AnyObject {
+    func setWeekDays(with days: [WeekDay])
+}
+
 final class NewHabitViewController: UIViewController {
     
+    private var weekDays: [WeekDay] = []
+   
     private let emojis = ["🙂", "😻", "🌺", "🐶", "❤️", "😱",
                           "😇" , "😡", "🥶", "🤔", "🙌", "🍔",
                           "🥦" , "🏓", "🥇", "🎸", "🏝️", "😪"]
@@ -33,12 +39,14 @@ final class NewHabitViewController: UIViewController {
         )
         collectionView.register(NewHabitViewControllerColorCell.self,
                                 forCellWithReuseIdentifier: "colorCell")
-        collectionView.register(NewHabitViewControllerCell.self,
+        collectionView.register(NewHabitViewControllerEmojisCell.self,
                                 forCellWithReuseIdentifier: "cell")
         collectionView.register(SupplementaryView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: "header")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.allowsMultipleSelection = true
+       
         return collectionView
     }()
     
@@ -114,28 +122,16 @@ final class NewHabitViewController: UIViewController {
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
-        scrollView.frame = view.bounds
-        scrollView.contentSize = contentSize
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
     
-    private lazy var contentView: UIView = {
-        let contentView = UIView()
-        contentView.backgroundColor = .white
-        contentView.frame.size = contentSize
-        return contentView
-    }()
-    
-    private lazy var containerView: UIView = {
+    private var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.frame.size = contentSize
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    private var contentSize: CGSize {
-        CGSize(width: view.frame.width, height: view.frame.height + 150)
-    }
     
     private var stackMovableErrorLabel: UIStackView = {
         let stack = UIStackView()
@@ -143,14 +139,14 @@ final class NewHabitViewController: UIViewController {
         return stack
     }()
     
-    private var neededScrollViewHeightChange = true
+    private var indexSelectedEmojiCell = IndexPath()
+    private var indexSelectedCollectionCell = IndexPath()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        contentView.addSubview(containerView)
-        contentView.addSubview(tableView)
+        scrollView.addSubview(containerView)
+        containerView.addSubview(tableView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(backgroundLabel)
         containerView.addSubview(nameTrackerTextField)
@@ -169,51 +165,56 @@ final class NewHabitViewController: UIViewController {
         tableView.delegate = self
         
         nameTrackerTextField.delegate = self
+        
     }
     
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
+            
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            containerView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 27),
             titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            
-            nameTrackerTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 65),
-            nameTrackerTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -32),
-            nameTrackerTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 32),
-            
-            stackMovableErrorLabel.topAnchor.constraint(equalTo: backgroundLabel.bottomAnchor),
-            stackMovableErrorLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            stackMovableErrorLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             
             backgroundLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,constant: 38),
             backgroundLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
             backgroundLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             backgroundLabel.heightAnchor.constraint(equalToConstant: 75),
             
+            nameTrackerTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 65),
+            nameTrackerTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -32),
+            nameTrackerTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 32),
+            
+            tableView.topAnchor.constraint(equalTo: stackMovableErrorLabel.bottomAnchor, constant: 24),
+            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            tableView.heightAnchor.constraint(equalToConstant: 150),
+            
             collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo:  containerView.trailingAnchor, constant: -16),
-            collectionView.heightAnchor.constraint(equalToConstant: 525),
+            collectionView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 25),
+            collectionView.trailingAnchor.constraint(equalTo:  containerView.trailingAnchor, constant: -25),
+            collectionView.heightAnchor.constraint(equalToConstant: 492),
             
             stackButtons.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
             stackButtons.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             stackButtons.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             stackButtons.heightAnchor.constraint(equalToConstant: 60),
+            stackButtons.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20),
             
-            tableView.topAnchor.constraint(equalTo: stackMovableErrorLabel.bottomAnchor, constant: 24),
-            tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-            tableView.heightAnchor.constraint(equalToConstant: 150)
+            stackMovableErrorLabel.topAnchor.constraint(equalTo: backgroundLabel.bottomAnchor),
+            stackMovableErrorLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            stackMovableErrorLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
         ])
     }
-    
-    //    private func setupSubviews(_ subviews: UIView...) {
-    //        subviews.forEach { subview in
-    //            stackView.addSubview(subview)
-    //            subview.translatesAutoresizingMaskIntoConstraints = false
-    //        }
-    //    }
-    
 }
 
 extension NewHabitViewController: UICollectionViewDataSource {
@@ -229,10 +230,12 @@ extension NewHabitViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? NewHabitViewControllerCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? NewHabitViewControllerEmojisCell else { return UICollectionViewCell() }
             cell.titleLabel.text = emojis[indexPath.row]
             return cell
+            
         }
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? NewHabitViewControllerColorCell else { return UICollectionViewCell() }
         cell.titleLabel.backgroundColor = colors[indexPath.row]
         return cell
@@ -241,15 +244,27 @@ extension NewHabitViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if indexPath.section == 0 {
-            guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header", for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
+            guard let view = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: "header",
+                for: indexPath
+            ) as? SupplementaryView else { return UICollectionReusableView() }
+            
             view.titleLabel.text = "Emoji"
             return view
         }
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header", for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
+        
+        guard let view = collectionView.dequeueReusableSupplementaryView(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "header",
+            for: indexPath
+        ) as? SupplementaryView else { return UICollectionReusableView() }
+        
         view.titleLabel.text = "Цвет"
         return view
     }
 }
+
 extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -262,69 +277,108 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 12
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 90)
+        return CGSize(width: collectionView.frame.width, height: 81)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets { return UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets { return UIEdgeInsets(top: 0, left: 0, bottom: 14, right: 0)
         
     }
     
 }
 
-extension NewHabitViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableViewItems.count
+extension NewHabitViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+        
+            let beforeCell = collectionView.cellForItem(at: indexSelectedEmojiCell) as? NewHabitViewControllerEmojisCell
+              beforeCell?.titleLabel.backgroundColor = .white
+            indexSelectedEmojiCell = indexPath
+            
+            let cell = collectionView.cellForItem(at: indexPath) as? NewHabitViewControllerEmojisCell
+            
+            cell?.titleLabel.backgroundColor = .ypLightGray
+        } else {
+            
+            let beforeCell = collectionView.cellForItem(at: indexSelectedCollectionCell) as? NewHabitViewControllerColorCell
+              beforeCell?.borderView.layer.borderColor = UIColor.clear.cgColor
+            indexSelectedCollectionCell = indexPath
+
+            let cell = collectionView.cellForItem(at: indexPath) as? NewHabitViewControllerColorCell
+            let color = colors[indexPath.row]
+            cell?.borderView.layer.borderColor = color.withAlphaComponent(0.3).cgColor
+        }
     }
-    
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell", for: indexPath) as? NewHabitTableViewCell else { return UITableViewCell() }
-        cell.categoryLabel.text = tableViewItems[indexPath.row]
-        cell.backgroundColor = .ypBackgroundDay
-        return cell
-    }
+
 }
+
+extension NewHabitViewController: UITableViewDataSource {
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return tableViewItems.count
+        }
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell", for: indexPath) as? NewHabitTableViewCell else { return UITableViewCell() }
+            cell.categoryLabel.text = tableViewItems[indexPath.row]
+            if indexPath.row == 1 {
+                cell.configureScheduleCell(weekDays)
+            }
+            cell.backgroundColor = .ypBackgroundDay
+            return cell
+        }
+    }
 
 extension NewHabitViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 1 {
+            let vc = ScheduleViewController()
+            vc.delegate = self
+            present(vc, animated: true)
+        }
     }
 }
 
 extension NewHabitViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        
-        
+   
         if range.location == 3 {
             stackMovableErrorLabel.addArrangedSubview(errorLabel)
             errorLabel.isHidden = false
-            if neededScrollViewHeightChange == true {
-                neededScrollViewHeightChange = false
-                scrollView.contentSize.height += 38
-            }
-            
             return false
         }
         
         if !errorLabel.isHidden {
-            neededScrollViewHeightChange = true
             errorLabel.isHidden = true
-            scrollView.contentSize.height -= 38
             return true
         }
         
         return true
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        errorLabel.isHidden = true
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        return true
+    }
+}
+
+extension NewHabitViewController: ScheduleViewControllerDelegate {
+    func setWeekDays(with days: [WeekDay]) {
+        weekDays = days
+        tableView.reloadData()
     }
     
 }

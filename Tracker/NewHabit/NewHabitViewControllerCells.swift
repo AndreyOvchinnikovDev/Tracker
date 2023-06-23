@@ -7,19 +7,28 @@
 
 import UIKit
 
-final class NewHabitViewControllerCell: UICollectionViewCell {
-    let titleLabel = UILabel()
-    
+final class NewHabitViewControllerEmojisCell: UICollectionViewCell {
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 32)
+        label.textAlignment = .center
+        label.layer.cornerRadius = 16
+        label.layer.masksToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        titleLabel.backgroundColor = .ypLightGray
-        titleLabel.font = .systemFont(ofSize: 32)
-        titleLabel.textAlignment = .center
-        titleLabel.layer.cornerRadius = 16
-        titleLabel.layer.masksToBounds = true
         contentView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -27,28 +36,39 @@ final class NewHabitViewControllerCell: UICollectionViewCell {
             titleLabel.widthAnchor.constraint(equalToConstant: 52)
         ])
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 final class NewHabitViewControllerColorCell: UICollectionViewCell {
-    let titleLabel = UILabel()
-    let borderView = UIView()
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.layer.cornerRadius = 8
+        label.layer.masksToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
+    let borderView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 11
+        view.layer.borderWidth = 3
+        view.layer.borderColor = UIColor.clear.cgColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(borderView)
-        borderView.layer.cornerRadius = 11
-        borderView.layer.borderWidth = 3
-        borderView.layer.borderColor = UIColor.colorSection5.withAlphaComponent(0.3).cgColor
-        titleLabel.layer.cornerRadius = 8
-        titleLabel.layer.masksToBounds = true
         contentView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        borderView.translatesAutoresizingMaskIntoConstraints = false
+        
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -59,10 +79,5 @@ final class NewHabitViewControllerColorCell: UICollectionViewCell {
             borderView.widthAnchor.constraint(equalToConstant: 52),
             borderView.heightAnchor.constraint(equalToConstant: 52)
         ])
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

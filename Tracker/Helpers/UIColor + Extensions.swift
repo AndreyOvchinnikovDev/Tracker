@@ -12,6 +12,9 @@ extension UIColor {
     static var ypWhiteDay: UIColor { UIColor(named: "ypWhite[day]") ?? .white }
     static var ypBackgroundDay: UIColor { UIColor(named: "ypBackground[day]") ?? .white }
     static var ypLightGray: UIColor { UIColor(named: "ypLightGray") ?? .white }
+    static var ypBlue: UIColor { UIColor(named: "ypBlue") ?? .white }
+    static var ypRed: UIColor { UIColor(named: "ypRed") ?? .white }
+    
     static var colorSection1: UIColor { UIColor(named: "ColorSelection 1") ?? white }
     static var colorSection2: UIColor { UIColor(named: "ColorSelection 2") ?? white }
     static var colorSection3: UIColor { UIColor(named: "ColorSelection 3") ?? white }
