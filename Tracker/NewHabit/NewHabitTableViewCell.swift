@@ -9,16 +9,14 @@ import UIKit
 import Foundation
 
 final class NewHabitTableViewCell: UITableViewCell {
-  //  let weekDays:WeekDay = .Friday
-    
-    let categoryLabel: UILabel = {
+    let titleCellLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
         label.textColor = .ypBlackDay
         return label
     }()
     
-    let schedule: UILabel = {
+    let addedLabelInCell: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
         label.textColor = .lightGray
@@ -36,8 +34,8 @@ final class NewHabitTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         accessoryType = .disclosureIndicator
         contentView.addSubview(stackView)
-        stackView.addArrangedSubview(categoryLabel)
-        stackView.addArrangedSubview(schedule)
+        stackView.addArrangedSubview(titleCellLabel)
+        stackView.addArrangedSubview(addedLabelInCell)
         
         setupConstraints()
         
@@ -57,11 +55,11 @@ final class NewHabitTableViewCell: UITableViewCell {
     
     func configureScheduleCell(_ weekDays: [WeekDay]) {
         if weekDays.count == 7 {
-            schedule.text = "Каждый день"
+            addedLabelInCell.text = "Каждый день"
         } else {
             let textArray = weekDays.map { $0.rawValue }
             let text = textArray.joined(separator: ",")
-            schedule.text = text
+            addedLabelInCell.text = text
         }
     }
 }

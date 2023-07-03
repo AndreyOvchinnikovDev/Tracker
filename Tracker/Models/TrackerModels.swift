@@ -18,10 +18,20 @@ struct Tracker {
 
 struct TrackerCategory {
     let name: String
-    let categories: [Tracker]
+    let trackers: [Tracker]
 }
 
 struct TrackerRecord {
     let id: UUID
     let date: Date
+}
+
+enum WeekDay: String, CaseIterable {
+    case Monday = "Пн"
+    case Tuesday = "Вт"
+    case Wednesday = "Ср"
+    case Thursday = "Чт"
+    case Friday = "Пт"
+    case Saturday = "Сб"
+    case Sunday = "Вс"
 }

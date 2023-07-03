@@ -6,16 +6,16 @@
 //
 
 import UIKit
-enum WeekDay: String, CaseIterable {
- 
-    case Monday = "Пн"
-    case Tuesday = "Вт"
-    case Wednesday = "Ср"
-    case Thursday = "Чт"
-    case Friday = "Пт"
-    case Saturday = "Сб"
-    case Sunday = "Вс"
-}
+//enum WeekDay: String, CaseIterable {
+// 
+//    case Monday = "Пн"
+//    case Tuesday = "Вт"
+//    case Wednesday = "Ср"
+//    case Thursday = "Чт"
+//    case Friday = "Пт"
+//    case Saturday = "Сб"
+//    case Sunday = "Вс"
+//}
 
 
 class ScheduleViewController: UIViewController {
