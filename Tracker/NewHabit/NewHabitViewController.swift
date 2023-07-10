@@ -53,7 +53,6 @@ final class NewHabitViewController: UIViewController {
                                 withReuseIdentifier: "header")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.allowsMultipleSelection = true
-        
         return collectionView
     }()
     
@@ -100,6 +99,7 @@ final class NewHabitViewController: UIViewController {
         let button = UIButton(type: .system)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.setTitle("Создать", for: .normal)
+        button.isEnabled = false
         button.tintColor = .ypWhiteDay
         button.backgroundColor = .ypGray
         button.layer.cornerRadius = 16
@@ -115,6 +115,7 @@ final class NewHabitViewController: UIViewController {
         button.layer.borderWidth = 0.5
         button.layer.borderColor = UIColor.red.cgColor
         button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -177,7 +178,6 @@ final class NewHabitViewController: UIViewController {
         storageCategories.forEach { nameCategory in
             nameCategories.append(nameCategory.name)
         }
-      
     }
     
     private func setupConstraints() {
@@ -246,6 +246,15 @@ final class NewHabitViewController: UIViewController {
         } else {
             DataManager.shared.createAndAddCategory(nameCategory: categoryName, tracker: tracker)
         }
+        
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        let tabBarVC = TabBarController()
+        window.rootViewController = tabBarVC
+        
+    }
+    
+    @objc private func cancelButtonTapped() {
+        dismiss(animated: true)
     }
     
     private func activateCreateButton() {
@@ -268,6 +277,7 @@ final class NewHabitViewController: UIViewController {
     }
 }
 
+// MARK: - extension UICollectionViewDataSource
 extension NewHabitViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -290,7 +300,6 @@ extension NewHabitViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? NewHabitViewControllerColorCell else { return UICollectionViewCell() }
         cell.titleLabel.backgroundColor = colors[indexPath.row]
         return cell
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -316,6 +325,7 @@ extension NewHabitViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - extension UICollectionViewDelegateFlowLayout
 extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -338,11 +348,10 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets { return UIEdgeInsets(top: 0, left: 0, bottom: 14, right: 0)
-        
     }
-    
 }
 
+// MARK: - extension UICollectionViewDelegate
 extension NewHabitViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
@@ -363,9 +372,9 @@ extension NewHabitViewController: UICollectionViewDelegate {
             activateCreateButton()
         }
     }
-    
 }
 
+// MARK: - extension UITableViewDataSource
 extension NewHabitViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableViewItems.count
@@ -384,6 +393,7 @@ extension NewHabitViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - extension UITableViewDelegate
 extension NewHabitViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
@@ -404,13 +414,14 @@ extension NewHabitViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - extension UITextFieldDelegate
 extension NewHabitViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if string == " " {
             return false
         }
         
-        if range.location == 3 {
+        if range.location == 38 {
             stackMovableErrorLabel.addArrangedSubview(errorLabel)
             errorLabel.isHidden = false
             return false
@@ -436,9 +447,9 @@ extension NewHabitViewController: UITextFieldDelegate {
         activateCreateButton()
         return true
     }
-    
 }
 
+// MARK: - extension ScheduleViewControllerDelegate
 extension NewHabitViewController: ScheduleViewControllerDelegate {
     func setWeekDays(with days: [WeekDay]) {
         weekDays = days
@@ -447,6 +458,7 @@ extension NewHabitViewController: ScheduleViewControllerDelegate {
     }
 }
 
+// MARK: - extension CategoryViewControllerDelegate
 extension NewHabitViewController: CategoryViewControllerDelegate {
     func setCategoryAndCategories(with categories: [String],and category: String) {
         self.nameCategories = categories

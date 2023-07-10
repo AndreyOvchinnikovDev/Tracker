@@ -12,41 +12,48 @@ final class DataManager {
     
     var categories: [TrackerCategory] = [
         TrackerCategory(
-            name: "Work",
+            name: "Учеба",
             trackers: [
                 Tracker(
                     id: UUID(),
-                    name: "go work",
+                    name: "сделать домашку",
                     color: .colorSection1,
                     emoji: "🙂",
-                    schedule: [.Friday, .Saturday]
+                    schedule: [.Friday, .Thursday, .Saturday, .Monday]
                 ),
                 Tracker(
                     id: UUID(),
-                    name: "comeback",
+                    name: "пройти новый материал",
                     color: .colorSection13,
                     emoji: "😻",
-                    schedule: [.Monday, .Sunday]
+                    schedule: [.Monday]
                 ),
                 Tracker(
                     id: UUID(),
-                    name: "chill",
+                    name: "еще раз пройти новый материал",
                     color: .colorSection13,
                     emoji: "😻",
-                    schedule: [.Monday, .Sunday]
+                    schedule: [.Saturday]
+                ),
+                Tracker(
+                    id: UUID(),
+                    name: "и еще раз",
+                    color: .colorSection7,
+                    emoji: "😻",
+                    schedule: [.Saturday]
                 )
-
             ]
         ),
+        
         TrackerCategory(
-            name: "Learning",
+            name: "Уборка",
             trackers: [
                 Tracker(
                     id: UUID(),
-                    name: "study",
+                    name: "Убираться пока не уберешься",
                     color: .colorSection10,
                     emoji: "🌺",
-                    schedule: [.Sunday, .Monday, .Wednesday]
+                    schedule: [.Saturday, .Monday, .Wednesday]
                 )
             ]
         )
@@ -54,6 +61,7 @@ final class DataManager {
         
     private init() {}
     
+    // MARK: - Public Methods
     func createAndAddReplacedCategory(nameCategory: String, tracker: Tracker) {
         let existCategory = categories.filter { $0.name == nameCategory }
         var newTrackers = [Tracker]()

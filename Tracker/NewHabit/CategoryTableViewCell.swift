@@ -16,13 +16,11 @@ final class CategoryTableViewCell: UITableViewCell {
         return label
     }()
     
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(nameCategory)
         
-       setupConstraints()
-        
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -30,6 +28,7 @@ final class CategoryTableViewCell: UITableViewCell {
     }
     
     private func setupConstraints() {
+        
         NSLayoutConstraint.activate([
             nameCategory.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             nameCategory.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),

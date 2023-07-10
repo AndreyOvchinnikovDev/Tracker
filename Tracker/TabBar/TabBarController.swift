@@ -12,26 +12,31 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewControllers = [
-            setViewControllers(viewController: TrackListViewController(),
-                               title: "Трекеры",
-                               image: nil),
-            setViewControllers(viewController: StatisticViewController(),
-                               title: "Статистика",
-                               image: nil)
+            setViewControllers(
+                viewController: TrackListViewController(),
+                title: "Трекеры",
+                image: nil
+            ),
+            setViewControllers(
+                viewController: StatisticViewController(),
+                title: "Статистика",
+                image: nil
+            )
         ]
     }
     
-    private func setViewControllers(viewController: UIViewController,
-                                    title: String,
-                                    image: UIImage?) -> UIViewController {
+    private func setViewControllers(
+        viewController: UIViewController,
+        title: String,
+        image: UIImage?
+    ) -> UIViewController {
         
-        let vc = UINavigationController(rootViewController: viewController)
-        vc.navigationBar.prefersLargeTitles = true
-        UINavigationBar.appearance().tintColor = .black
-        vc.tabBarItem = UITabBarItem(title: title,
-                                     image: title == "Трекеры" ? UIImage(named: "record.circle.fill") : UIImage(named: "hare.fill"),
-                                     selectedImage: nil)
-        vc.tabBarItem.title = title
-        return vc
+        viewController.tabBarItem = UITabBarItem(
+            title: title,
+            image: title == "Трекеры" ? UIImage(named: "record.circle.fill")
+                                      : UIImage(named: "hare.fill"),
+            selectedImage: nil)
+        viewController.tabBarItem.title = title
+        return viewController
     }
 }

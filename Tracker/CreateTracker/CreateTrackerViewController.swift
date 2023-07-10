@@ -8,7 +8,6 @@
 import UIKit
 
 final class CreateTrackerViewController: UIViewController {
-    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
@@ -45,6 +44,7 @@ final class CreateTrackerViewController: UIViewController {
            setupConstraints()
     }
     
+    // MARK: - Private methods
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),

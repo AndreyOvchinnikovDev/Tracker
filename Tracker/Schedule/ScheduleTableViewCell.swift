@@ -46,7 +46,4 @@ final class ScheduleTableViewCell: UITableViewCell {
             switchWeekday.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
     }
-    
- 
-    
 }

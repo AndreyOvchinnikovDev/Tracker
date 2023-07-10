@@ -63,6 +63,7 @@ final class NewCategoryViewController: UIViewController {
         nameCategoryTextField.delegate = self
     }
     
+    // MARK: - private methods
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
@@ -91,6 +92,7 @@ final class NewCategoryViewController: UIViewController {
     }
 }
 
+// MARK: - extension UITextFieldDelegate
 extension NewCategoryViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Foundation
 
 final class NewHabitTableViewCell: UITableViewCell {
     let titleCellLabel: UILabel = {
@@ -38,15 +37,6 @@ final class NewHabitTableViewCell: UITableViewCell {
         stackView.addArrangedSubview(addedLabelInCell)
         
         setupConstraints()
-        
-        }
-    
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -41),
-            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-        ])
     }
     
     required init?(coder: NSCoder) {
@@ -61,5 +51,13 @@ final class NewHabitTableViewCell: UITableViewCell {
             let text = textArray.joined(separator: ",")
             addedLabelInCell.text = text
         }
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -41),
+            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+        ])
     }
 }

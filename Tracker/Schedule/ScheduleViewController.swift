@@ -6,25 +6,13 @@
 //
 
 import UIKit
-//enum WeekDay: String, CaseIterable {
-// 
-//    case Monday = "Пн"
-//    case Tuesday = "Вт"
-//    case Wednesday = "Ср"
-//    case Thursday = "Чт"
-//    case Friday = "Пт"
-//    case Saturday = "Сб"
-//    case Sunday = "Вс"
-//}
-
 
 class ScheduleViewController: UIViewController {
-
-    weak var delegate: ScheduleViewControllerDelegate!
+    
+    weak var delegate: ScheduleViewControllerDelegate?
+    var weekDays = [WeekDay]()
     
     private let tableViewItems = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    
-    var weekDays = [WeekDay]()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -81,26 +69,43 @@ class ScheduleViewController: UIViewController {
         containerView.addSubview(titleLabel)
         containerView.addSubview(tableView)
         containerView.addSubview(completeButton)
-                
+        
         setupConstraints()
         
         tableView.dataSource = self
         tableView.delegate = self
     }
     
+    // MARK: - Public methods
+    @objc func setDays() {
+        delegate?.setWeekDays(with: weekDays)
+        dismiss(animated: true)
+    }
     
+    @objc func switchDidTapped(_ sender: UISwitch!) {
+        let days = WeekDay.allCases
+        if sender.isOn {
+            weekDays.append(days[sender.tag])
+        } else {
+            if let index = weekDays.firstIndex(of: days[sender.tag]) {
+                weekDays.remove(at: index)
+            }
+        }
+    }
+    
+    // MARK: - Private methods
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
-  
+            
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             
-           containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-           containerView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            containerView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             
@@ -117,27 +122,10 @@ class ScheduleViewController: UIViewController {
             completeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             completeButton.heightAnchor.constraint(equalToConstant: 60),
             completeButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 47),
-            
         ])
     }
-    
-     @objc func setDays() {
-         delegate?.setWeekDays(with: weekDays)
-         dismiss(animated: true)
-    }
-    
-     @objc func switchDidTapped(_ sender: UISwitch!) {
-         let days = WeekDay.allCases
-         if sender.isOn {
-             weekDays.append(days[sender.tag])
-         } else {
-           if let index = weekDays.firstIndex(of: days[sender.tag]) {
-                 weekDays.remove(at: index)
-             }
-         }
-    }
 }
-
+// MARK: - Extensions TableView
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         tableViewItems.count
@@ -150,7 +138,6 @@ extension ScheduleViewController: UITableViewDataSource {
         cell.switchWeekday.addTarget(self, action: #selector(self.switchDidTapped(_:)), for: .valueChanged)
         cell.backgroundColor = .ypBackgroundDay
         return cell
-        
     }
 }
 

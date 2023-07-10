@@ -56,10 +56,9 @@ final class CategoryViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
-        
-        
     }
     
+    // MARK: - private methods
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
@@ -75,17 +74,17 @@ final class CategoryViewController: UIViewController {
             addCategoryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             addCategoryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             addCategoryButton.heightAnchor.constraint(equalToConstant: 60),
-        
         ])
     }
     
     @objc private func addCategoryTapped() {
-            let vc = NewCategoryViewController()
-            vc.delegate = self
-            present(vc, animated: true)
+        let vc = NewCategoryViewController()
+        vc.delegate = self
+        present(vc, animated: true)
     }
 }
 
+// MARK: - extension UITableViewDataSource
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
@@ -95,11 +94,12 @@ extension CategoryViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "tableViewCell", for: indexPath) as? CategoryTableViewCell else { return UITableViewCell() }
         cell.nameCategory.text = categories[indexPath.row]
         cell.backgroundColor = .ypBackgroundDay
-  
+        
         return cell
     }
 }
 
+// MARK: - extension UITableViewDelegate
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
@@ -117,13 +117,13 @@ extension CategoryViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - extension NewCategoryViewControllerDelegate
 extension CategoryViewController: NewCategoryViewControllerDelegate {
     func addCategory(category: String) {
         if !categories.contains(category) {
             self.categories.append(category)
         }
         tableView.reloadData()
-    
     }
 }
 

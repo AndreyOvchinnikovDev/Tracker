@@ -28,6 +28,7 @@
 		1DCDC44C2A3A7C560003B039 /* NewHabitSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCDC44B2A3A7C560003B039 /* NewHabitSupplementaryView.swift */; };
 		1DEECDD22A516D16004F126B /* TrackListViewControllerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEECDD12A516D16004F126B /* TrackListViewControllerCell.swift */; };
 		1DEECDD42A537606004F126B /* TrackerListSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEECDD32A537606004F126B /* TrackerListSupplementaryView.swift */; };
+		1DEECDF62A5BDE50004F126B /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEECDF52A5BDE50004F126B /* Placeholder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		1DCDC44B2A3A7C560003B039 /* NewHabitSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitSupplementaryView.swift; sourceTree = "<group>"; };
 		1DEECDD12A516D16004F126B /* TrackListViewControllerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewControllerCell.swift; sourceTree = "<group>"; };
 		1DEECDD32A537606004F126B /* TrackerListSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerListSupplementaryView.swift; sourceTree = "<group>"; };
+		1DEECDF52A5BDE50004F126B /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				1D78026A2A2D63A900D5C91B /* UIColor + Extensions.swift */,
+				1DEECDF52A5BDE50004F126B /* Placeholder.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -289,6 +292,7 @@
 				1D78026D2A2D775400D5C91B /* NewHabitViewController.swift in Sources */,
 				1D93377F2A41449000536F38 /* ScheduleViewController.swift in Sources */,
 				1D7802732A312FE100D5C91B /* NewHabitTableViewCell.swift in Sources */,
+				1DEECDF62A5BDE50004F126B /* Placeholder.swift in Sources */,
 				1D9ACEF62A25882B006DD51F /* TabBarController.swift in Sources */,
 				1D9337872A451F3C00536F38 /* TrackerModels.swift in Sources */,
 				1DCDC44C2A3A7C560003B039 /* NewHabitSupplementaryView.swift in Sources */,
@@ -442,6 +446,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -472,6 +477,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

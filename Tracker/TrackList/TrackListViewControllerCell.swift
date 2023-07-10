@@ -19,17 +19,16 @@ final class TrackListViewControllerCell: UICollectionViewCell {
     
     private let plusButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        //  button.isEnabled = true
         button.layer.cornerRadius = 17
         button.tintColor = .white
-       // button.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    let countDaysLabel: UILabel = {
+    var countDaysLabel: UILabel = {
         let label = UILabel()
-        label.text = "1 день"
         label.font = .systemFont(ofSize: 12)
         label.textColor = .ypBlackDay
         label.textAlignment = .left
@@ -51,13 +50,19 @@ final class TrackListViewControllerCell: UICollectionViewCell {
     
     let nameTrackerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Поливать ратения"
         label.font = .systemFont(ofSize: 12)
+        label.numberOfLines = 2
         label.textColor = .ypWhiteDay
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    weak var delegate: TrackListViewControllerCellDelegate?
+    
+    private var idTracker: UUID?
+    private var isCompleted = false
+    private var indexPath: IndexPath?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -73,6 +78,35 @@ final class TrackListViewControllerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public methods
+    func configure(tracker: Tracker, date: Date, indexPath: IndexPath, isCompleted: Bool, completedDays: Int) {
+        emojiLabel.text = tracker.emoji
+        nameTrackerLabel.text = tracker.name
+        bottomView.backgroundColor = tracker.color
+        idTracker = tracker.id
+        self.indexPath = indexPath
+        self.isCompleted = isCompleted
+        
+        countDaysLabel.text = completedDaysString(completedDaysCount: completedDays)
+        
+        let image = !isCompleted ? UIImage(systemName: "plus") : UIImage(systemName: "checkmark")
+        plusButton.setImage(image, for: .normal)
+        
+        let buttonColorAlpha = !isCompleted ? tracker.color : tracker.color.withAlphaComponent(0.3)
+        plusButton.backgroundColor = buttonColorAlpha
+        
+        let dateTracker = Calendar.current.dateComponents([.day], from: date)
+        let dateToday = Calendar.current.dateComponents([.day], from: Date())
+        
+        guard let dateTracker = dateTracker.day, let dateToday = dateToday.day else { return }
+        if dateTracker > dateToday {
+            plusButton.isEnabled = false
+        } else {
+            plusButton.isEnabled = true
+        }
+    }
+    
+    // MARK: - Private methods
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             bottomView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -94,14 +128,26 @@ final class TrackListViewControllerCell: UICollectionViewCell {
             nameTrackerLabel.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor, constant: -12),
             nameTrackerLabel.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 12),
             nameTrackerLabel.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -12)
-            
         ])
     }
     
-    func configure(emoji: String, nameTracker: String, color: UIColor ) {
-        emojiLabel.text = emoji
-        nameTrackerLabel.text = nameTracker
-        bottomView.backgroundColor = color
-        plusButton.backgroundColor = color
+    private func completedDaysString(completedDaysCount: Int) -> String {
+        var dayString: String = ""
+        if "1".contains("\(completedDaysCount % 10)")      {dayString = "день"}
+        if "234".contains("\(completedDaysCount % 10)")    {dayString = "дня" }
+        if "567890".contains("\(completedDaysCount % 10)") {dayString = "дней"}
+        if 11...14 ~= completedDaysCount % 100             {dayString = "дней"}
+        
+        return "\(completedDaysCount) " + dayString
+    }
+    
+    @objc private func plusButtonTapped() {
+        guard let idTracker,  let indexPath else { return }
+        if !isCompleted {
+            delegate?.addCompletedTracker(id: idTracker, indexPath: indexPath)
+        } else {
+            delegate?.removeCompletedTracker(id: idTracker, indexPath: indexPath)
+        }
     }
 }
+
