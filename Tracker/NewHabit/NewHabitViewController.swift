@@ -403,11 +403,13 @@ extension NewHabitViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         nameTrackerTextField.endEditing(true)
         if indexPath.row == 1 {
+            activateCreateButton()
             let vc = ScheduleViewController()
             vc.delegate = self
             present(vc, animated: true)
         }
         let vc = CategoryViewController()
+        activateCreateButton()
         vc.delegate = self
         vc.categories = nameCategories
         present(vc, animated: true)

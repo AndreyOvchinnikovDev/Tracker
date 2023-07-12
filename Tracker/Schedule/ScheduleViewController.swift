@@ -136,7 +136,6 @@ extension ScheduleViewController: UITableViewDataSource {
         cell.titleLabel.text = tableViewItems[indexPath.row]
         cell.switchWeekday.tag = indexPath.row
         cell.switchWeekday.addTarget(self, action: #selector(self.switchDidTapped(_:)), for: .valueChanged)
-        cell.backgroundColor = .ypBackgroundDay
         return cell
     }
 }

@@ -12,6 +12,18 @@ protocol TrackListViewControllerCellDelegate: AnyObject {
 }
 
 class TrackListViewController: UIViewController {
+    struct Parameters {
+        let leftInset: CGFloat
+        let rightInset: CGFloat
+        let bottomInset: CGFloat
+        let topInset: CGFloat
+        let countCells: CGFloat
+        let offset: CGFloat
+        let heightCell: CGFloat
+        let heightHeader: CGFloat
+        let minimumInteritemSpacing: CGFloat
+    }
+    
     private var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.YY"
@@ -90,6 +102,7 @@ class TrackListViewController: UIViewController {
         textField.placeholder = "Поиск"
         textField.clearButtonMode = .never
         textField.backgroundColor = .ypDatePickerColor.withAlphaComponent(0.12)
+        textField.addTarget(self, action:#selector(changeText), for: .allEditingEvents)
         return textField
     }()
     
@@ -100,11 +113,11 @@ class TrackListViewController: UIViewController {
         placeholder.translatesAutoresizingMaskIntoConstraints = false
         return placeholder
     }()
-
+    
     private var categories = DataManager.shared.categories
     private var visibleCategories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
-        
+    
     private var selectedWeekday: WeekDay = .Friday
     private var currentDate: Date {
         get {
@@ -133,37 +146,45 @@ class TrackListViewController: UIViewController {
         return collectionView
     }()
     
+    let parameters = Parameters(
+        leftInset: 16,
+        rightInset: 16,
+        bottomInset: 16,
+        topInset: 12,
+        countCells: 2,
+        offset: 20,
+        heightCell: 148,
+        heightHeader: 20,
+        minimumInteritemSpacing: 7
+    )
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        view.addSubview(titleView)
-        view.addSubview(collectionView)
-        view.addSubview(placeholder)
-        
-        titleView.addSubview(plusButton)
-        titleView.addSubview(titleLabel)
-        titleView.addSubview(stackViewTextFieldAndButton)
-        titleView.addSubview(datePicker)
-  
-        view.addSubview(dateLabel)
-        stackViewTextFieldAndButton.addArrangedSubview(searchTextField)
-        stackViewTextFieldAndButton.addArrangedSubview(cancelButton)
-        
+        addSubviews()
         setupConstraints()
-        
         collectionView.dataSource = self
         collectionView.delegate = self
-        
         searchTextField.delegate = self
-        
         weekdayAsString(date: datePicker)
-        
         updateDateLabel()
-        
         setupPlaceholder()
     }
     
     // MARK: - Private methods
+    private func addSubviews() {
+        view.backgroundColor = .white
+        view.addSubview(titleView)
+        view.addSubview(collectionView)
+        view.addSubview(placeholder)
+        view.addSubview(dateLabel)
+        titleView.addSubview(plusButton)
+        titleView.addSubview(titleLabel)
+        titleView.addSubview(stackViewTextFieldAndButton)
+        titleView.addSubview(datePicker)
+        stackViewTextFieldAndButton.addArrangedSubview(searchTextField)
+        stackViewTextFieldAndButton.addArrangedSubview(cancelButton)
+    }
+    
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
@@ -232,13 +253,20 @@ class TrackListViewController: UIViewController {
     }
     
     private func filterSearchTextField(text: String) {
-        let categories = categories.map({ category in
+        let filteredCategories = categories.map({ category in
             TrackerCategory(name: category.name, trackers: category.trackers.filter({ tracker in
                 tracker.name.lowercased().contains(text.lowercased())
             }))
         })
         
+        let categories = filteredCategories.map({ category in
+            TrackerCategory(name: category.name, trackers: category.trackers.filter({ tracker in
+                tracker.schedule.contains(selectedWeekday)
+            }))
+        })
         removeEmptyCategories(categories: categories)
+        
+        collectionView.reloadData()
     }
     
     private func removeEmptyCategories(categories: [TrackerCategory]) {
@@ -251,6 +279,16 @@ class TrackListViewController: UIViewController {
             let isSomeDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
             return trackerRecord.id == id && isSomeDay
             
+        }
+    }
+    
+    @objc private func changeText() {
+        if searchTextField.text?.isEmpty == true {
+            updateCategoriesWithNeededWeekday(weekday: selectedWeekday)
+        } else {
+            filterSearchTextField(text: searchTextField.text!)
+            cancelButton.isHidden = false
+            setupPlaceholder()
         }
     }
     
@@ -276,6 +314,8 @@ class TrackListViewController: UIViewController {
     }
     
     @objc private func clearTextField() {
+        updateCategoriesWithNeededWeekday(weekday: selectedWeekday)
+        setupPlaceholder()
         searchTextField.text = ""
         cancelButton.isHidden = true
     }
@@ -340,47 +380,35 @@ extension TrackListViewController: UICollectionViewDataSource {
 // MARK: - Extension UICollectionViewDelegateFlowLayout
 extension TrackListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,layout collectionViewLayout: UICollectionViewLayout,sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width / 2) - 20
-        return CGSize(width: width, height: 148)
+        let width = ((collectionView.bounds.width) / parameters.countCells) - parameters.offset
+        return CGSize(width: width, height: parameters.heightCell)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 12, left: 16, bottom: 16, right: 16)
-        
+        return UIEdgeInsets(
+            top: parameters.topInset,
+            left: parameters.leftInset,
+            bottom: parameters.bottomInset,
+            right: parameters.rightInset
+        )
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 7
+        return parameters.minimumInteritemSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 20)
+        return CGSize(width: collectionView.frame.width, height: parameters.heightHeader)
     }
-    
 }
 
 // MARK: - Extension UITextFieldDelegate
 extension TrackListViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        cancelButton.isHidden = false
-        
-        if range.location == 0 {
-            filterSearchTextField(text: string)
-            collectionView.reloadData()
-            setupPlaceholder()
-        } else {
-            filterSearchTextField(text: textField.text! + string)
-            collectionView.reloadData()
-            setupPlaceholder()
-        }
-        return true
-    }
-        
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.endEditing(true)
+        searchTextField.resignFirstResponder()
         cancelButton.isHidden = true
         return true
     }
-
+    
 }
 

@@ -111,10 +111,6 @@ extension CategoryViewController: UITableViewDelegate {
         delegate?.setCategoryAndCategories(with: categories, and: category)
         dismiss(animated: true)
     }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath)
-    }
 }
 
 // MARK: - extension NewCategoryViewControllerDelegate

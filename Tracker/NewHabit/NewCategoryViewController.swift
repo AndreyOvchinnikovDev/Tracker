@@ -44,6 +44,7 @@ final class NewCategoryViewController: UIViewController {
         textField.placeholder = "Введите название категории"
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         textField.clearButtonMode = .whileEditing
+        textField.addTarget(self, action: #selector(isEmptyTextField), for: .allEditingEvents)
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -90,15 +91,21 @@ final class NewCategoryViewController: UIViewController {
         delegate?.addCategory(category: nameCategoryTextField.text ?? "empty row")
         dismiss(animated: true)
     }
+    
+    @objc private func isEmptyTextField() {
+        if nameCategoryTextField.text?.isEmpty == false &&
+            nameCategoryTextField.text?.first != " " {
+            addCategoryButton.backgroundColor = .ypBlackDay
+            addCategoryButton.isEnabled = true
+        } else {
+            addCategoryButton.backgroundColor = .ypGray
+            addCategoryButton.isEnabled = false
+        }
+    }
 }
-
 // MARK: - extension UITextFieldDelegate
 extension NewCategoryViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        addCategoryButton.backgroundColor = .ypBlackDay
-        addCategoryButton.isEnabled = true
-        
-        return true
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        nameCategoryTextField.resignFirstResponder()
     }
 }

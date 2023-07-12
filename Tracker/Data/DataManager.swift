@@ -19,7 +19,7 @@ final class DataManager {
                     name: "сделать домашку",
                     color: .colorSection1,
                     emoji: "🙂",
-                    schedule: [.Friday, .Thursday, .Saturday, .Monday]
+                    schedule: [.Friday, .Thursday, .Saturday, .Monday, .Wednesday, .Tuesday]
                 ),
                 Tracker(
                     id: UUID(),

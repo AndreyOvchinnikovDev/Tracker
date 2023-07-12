@@ -15,25 +15,28 @@ final class ScheduleTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     let switchWeekday: UISwitch = {
-       let switchWeekday = UISwitch()
-        
+        let switchWeekday = UISwitch()
         switchWeekday.onTintColor = .ypBlue
         switchWeekday.translatesAutoresizingMaskIntoConstraints = false
         return switchWeekday
     }()
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = .ypBackgroundDay
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(switchWeekday)
+        addSubviews()
         setupConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addSubviews() {
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(switchWeekday)
     }
     
     private func setupConstraints() {

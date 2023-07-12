@@ -66,11 +66,7 @@ final class TrackListViewControllerCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(bottomView)
-        contentView.addSubview(plusButton)
-        contentView.addSubview(countDaysLabel)
-        contentView.addSubview(emojiLabel)
-        contentView.addSubview(nameTrackerLabel)
+        addSubviews()
         setupConstraints()
     }
     
@@ -87,7 +83,7 @@ final class TrackListViewControllerCell: UICollectionViewCell {
         self.indexPath = indexPath
         self.isCompleted = isCompleted
         
-        countDaysLabel.text = completedDaysString(completedDaysCount: completedDays)
+        countDaysLabel.text = completedDays.completedDaysString()
         
         let image = !isCompleted ? UIImage(systemName: "plus") : UIImage(systemName: "checkmark")
         plusButton.setImage(image, for: .normal)
@@ -131,14 +127,12 @@ final class TrackListViewControllerCell: UICollectionViewCell {
         ])
     }
     
-    private func completedDaysString(completedDaysCount: Int) -> String {
-        var dayString: String = ""
-        if "1".contains("\(completedDaysCount % 10)")      {dayString = "день"}
-        if "234".contains("\(completedDaysCount % 10)")    {dayString = "дня" }
-        if "567890".contains("\(completedDaysCount % 10)") {dayString = "дней"}
-        if 11...14 ~= completedDaysCount % 100             {dayString = "дней"}
-        
-        return "\(completedDaysCount) " + dayString
+    private func addSubviews() {
+        contentView.addSubview(bottomView)
+        contentView.addSubview(plusButton)
+        contentView.addSubview(countDaysLabel)
+        contentView.addSubview(emojiLabel)
+        contentView.addSubview(nameTrackerLabel)
     }
     
     @objc private func plusButtonTapped() {
